@@ -96,7 +96,7 @@ class Alphabet():
     #     return out
 
 if __name__ == "__main__":
-    A = Alphabet(dataset="iam", mode="both")
+    A = Alphabet(dataset="ARABIC", mode="both")
     print(A.labels)
     logits = A.string_to_logits("bla")
     print(A.logits_to_string(logits))
@@ -104,3 +104,24 @@ if __name__ == "__main__":
     print(batch.shape)
     print(A.batch_logits_to_string_list(batch))
 
+
+ARABIC_CHARS = list(
+    "ءابتةتثجحخدذرزسشصضطظعغفقكلمنهوي"
+    "٠١٢٣٤٥٦٧٨٩"
+    " .,؛:؟!()-"
+)
+
+class ArabicAlphabet(Alphabet):
+    def __init__(self):
+        self.chars = ARABIC_CHARS
+        self.blank = "<BLANK>"
+        self.pad = "<PAD>"
+        self.start = "<SOS>"
+        self.end = "<EOS>"
+
+        self.all_symbols = [
+            self.pad, self.blank, self.start, self.end
+        ] + self.chars
+
+        self.toPosition = {c: i for i, c in enumerate(self.all_symbols)}
+        self.toChar = {i: c for c, i in self.toPosition.items()}

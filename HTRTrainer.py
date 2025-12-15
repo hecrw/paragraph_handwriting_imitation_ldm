@@ -35,7 +35,7 @@ def htr_parse_args():
     parser.add_argument('--DataloaderConfigFile', type=str, default="general768x768.yaml")
     parser.add_argument('--reset_optimizers_htr', action='store_true',default=False)
     parser.add_argument('--name', type=str, default="--default")
-    parser.add_argument('--batch_size', type=int, default=8)
+    parser.add_argument('--batch_size', type=int, default=2)
     parser.add_argument('--accumulate_grad_batches', type=int, default=2)
     return parser.parse_args()
 

@@ -3,13 +3,57 @@ from src.data.dataset_fetcher.iam_fetcher import preload_all_iam
 # from src.data.dataset_fetcher.nbb_fetcher import preload_all_nbb, preload_meta_nbb, preload_clustering_nbb
 # from src.data.dataset_fetcher.rimes_fetcher import preload_all_rimes, preload_meta_rimes, preload_clustering_rimes
 import h5py
-from src.data.utils.alphabet import Alphabet
+from src.data.utils.alphabet import ArabicAlphabet
+import os
+
+def fetch_arabic_jsonl(root, split, alphabet, size, **kwargs):
+    import json
+    from PIL import Image
+
+    images = {}
+    meta_data = {}
+    sample_names = []
+
+    writer_map = {}
+    next_writer_id = 0
+    alphabet=ArabicAlphabet()
+    ann_path = os.path.join(root, "annotations_768.jsonl")
+    with open(ann_path, "r", encoding="utf-8") as f:
+        for line in f:
+            obj = json.loads(line)
+
+            if obj["split"] != split:
+                continue
+
+            writer_str = obj["writer_id"]
+            if writer_str not in writer_map:
+                writer_map[writer_str] = next_writer_id
+                next_writer_id += 1
+
+            writer_id = writer_map[writer_str]
+
+            name = obj["id"]
+            img = Image.open(obj["image"]).convert("L")
+
+            text = obj["text"][::-1]
+
+            sample_names.append(name)
+            images[name] = img
+            meta_data[name] = {
+                "text": text,
+                "writer": writer_id,
+                "text_logits": alphabet.string_to_logits(x_in=text),
+            }
+
+    return sample_names, meta_data, images
 
 def fetch_dataset(dataset_type, preload=True, **kwargs):
     if dataset_type.lower() == "IAM".lower():
         if preload:
             return preload_all_iam(**kwargs)
         raise NotImplementedError
+    elif dataset_type == "ARABIC":
+        return fetch_arabic_jsonl(**kwargs)
     if dataset_type.lower() == "Synthetic".lower():
         return get_synthetic_Data(**kwargs)
     if dataset_type.lower() == "combined".lower():
@@ -26,6 +70,7 @@ def fetch_dataset(dataset_type, preload=True, **kwargs):
         return synthetic_names,synthetic_meta,synthetic_images
 
     return None
+
 
 def get_synthetic_Data(dataset_file,alphabet,size,invert_image=False,**kwargs):
     if alphabet==None:

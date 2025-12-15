@@ -23,6 +23,10 @@ from src.data.augmentation.ocrodeg import OcrodegAug
 import omegaconf
 import PIL
 
+class InvertTransform:
+    def __call__(self, x):
+        return 1 - x
+
 class AbstractDataset(Dataset):
     def __init__(self,root_source=None, root_target=None,
                  dataset_type="IAM",
