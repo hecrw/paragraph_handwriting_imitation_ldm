@@ -14,10 +14,9 @@ def count_params(model, verbose=False):
     return total_params
 
 #TODO is this name problematic? It would break a lot...
-def get_yaml(application,filename,project_name="mt_handwriting-diffusion",config_directory="configs"):
+def get_yaml(application,filename,project_name="paragraph_handwriting_imitation_ldm",config_directory="configs"):
     mypath = os.getcwd()
-    path = mypath[:mypath.find(project_name) + len(project_name)]
-    return os.path.join(path, config_directory,application,filename)
+    return os.path.join(mypath, project_name,config_directory,application,filename)
 
 def instantiate_completely(application,filename,**kwargs):
     file = get_yaml(application,filename)

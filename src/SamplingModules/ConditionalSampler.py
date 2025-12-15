@@ -222,7 +222,7 @@ def make_style_vector(from_example,batch_size=1,set="test",dl_apply=None,dl_file
 
 
     if from_example:
-        style_examples_dir = os.path.join(os.getcwd(),"StyleExamples")
+        style_examples_dir = os.path.join(os.getcwd(), "paragraph_handwriting_imitation_ldm","StyleExamples")
         possible_style_examples = os.listdir(style_examples_dir)
         random_sample = possible_style_examples[np.random.randint(0,len(possible_style_examples))]
         img = Image.open(os.path.join(style_examples_dir,random_sample)).convert('L')

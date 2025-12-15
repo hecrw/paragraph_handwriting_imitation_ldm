@@ -1,6 +1,6 @@
 target: src.diffusion.ddpm.LatentDiffusion
 params:
-  ld_ckpt_path: #TODO insert the path to ldm ckpt here
+  ld_ckpt_path: C:\Users\blade\Documents\college\arabic-handwriting-generator\paragraph_handwriting_imitation_ldm\paragraph_diffusion\our.ckpt
   linear_start : 0.0002
   linear_end : 0.0195
 
@@ -17,7 +17,7 @@ params:
   first_stage_config:
     target: thirdparty.VQVAEGAN.autoencoder.AutoencoderKL
     params:
-      ckpt_path: #TODO insert the path to the kl-regularizd autoencoder ckpt here
+      ckpt_path: C:\Users\blade\Documents\college\arabic-handwriting-generator\paragraph_handwriting_imitation_ldm\paragraph_diffusion\autoKL.ckpt
       ch: 32
       embed_dim: 1
       z_channels: 1
@@ -30,7 +30,7 @@ params:
   cond_config:
     target: src.diffusion.Conditioning.TextStyleSimple.TextStyleSimple
     params:
-      ckpt_seq_w : #TODO insert the path the to writer CNN here
+      ckpt_seq_w : C:\Users\blade\Documents\college\arabic-handwriting-generator\paragraph_handwriting_imitation_ldm\paragraph_diffusion\writerCNN.ckpt
       channels: 256
       d_model: 1024
       hidden_size: 256
