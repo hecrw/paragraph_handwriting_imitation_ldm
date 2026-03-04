@@ -146,7 +146,7 @@ class AbstractDataset(Dataset):
     def general_src_pad_mask(self,size,modeParagraph,z_shape,image):
         if isinstance(image,np.ndarray):
             return mk_padding_interpolation(image,z_shape)
-        if PIL.Image.isImageType(image):
+        if isinstance(image, PIL.Image.Image):
             return single_src_pad_mask(size,modeParagraph,z_shape,image)
 
         return NotImplementedError
