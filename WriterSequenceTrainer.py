@@ -39,6 +39,7 @@ def writer_parse_args():
     return parser.parse_args()
 
 if __name__ == "__main__":
+    torch.backends.cudnn.benchmark = False
 
     cfg = writer_parse_args()
 
@@ -65,7 +66,7 @@ if __name__ == "__main__":
 
     trainer = pl.Trainer(accelerator="gpu",devices=gpu_count,logger=logger,
                          callbacks=[es,mc],accumulate_grad_batches=cfg.accumulate_grad_batches,
-                         precision="16-mixed")
+                         precision="bf16-mixed")
     trainer.fit(model, train_dataloaders=gdm.train_dataloader(),val_dataloaders=gdm.val_dataloader(),
                 ckpt_path=checkpoint_path)
 

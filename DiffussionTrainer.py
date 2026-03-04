@@ -41,6 +41,8 @@ def diffusion_parse_args():
     return parser.parse_args()
 
 if __name__ == "__main__":
+    torch.backends.cudnn.benchmark = False
+
     cfg = diffusion_parse_args()
 
     if cfg.finetuning:
@@ -56,14 +58,14 @@ if __name__ == "__main__":
     if cfg.strategy == "demo":
         trainer = pl.Trainer(accelerator="gpu", devices=1, logger=logger,
                              callbacks=[ModelCheckpoint()], max_steps=max_steps,
-                             precision="16-mixed")
+                             precision="bf16-mixed")
     else:
 
         trainer = pl.Trainer(accelerator="gpu", devices=8, logger=logger,
                                   accumulate_grad_batches=accumulate_grad_batches,
                                  strategy=DDPStrategy(find_unused_parameters=True),callbacks=[ModelCheckpoint()],
                              max_steps=max_steps,
-                             precision="16-mixed")
+                             precision="bf16-mixed")
 
     model = instantiate_completely("Diffusion/ldm/", cfg.DiffusionConfigFile)
 
