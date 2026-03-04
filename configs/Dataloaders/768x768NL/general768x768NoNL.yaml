@@ -14,5 +14,5 @@ params:
   TestRun : False
   style_samples : False
   remove_newline : True
-  persistent_workers : True
-  n_workers : 8
+  persistent_workers : False
+  n_workers : 0

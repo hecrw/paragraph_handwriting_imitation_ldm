@@ -31,8 +31,8 @@ from src.data.augmentation.noTransform import NoTransform
 
 def htr_parse_args():
     parser = ArgumentParser()
-    parser.add_argument('--HTRConfigFile', type=str,default="HTR768x768.yaml")
-    parser.add_argument('--DataloaderConfigFile', type=str, default="general768x768.yaml")
+    parser.add_argument('--HTRConfigFile', type=str,default="HTR768x768UNIFIED.yaml")
+    parser.add_argument('--DataloaderConfigFile', type=str, default="generalUNIFIED768x768.yaml")
     parser.add_argument('--reset_optimizers_htr', action='store_true',default=False)
     parser.add_argument('--name', type=str, default="--default")
     parser.add_argument('--batch_size', type=int, default=8)
@@ -62,7 +62,8 @@ if __name__ == "__main__":
     es = EarlyStopping(monitor="val/cer", patience=50, mode="min")
 
     trainer = pl.Trainer(max_epochs=max_epochs, accelerator="gpu", devices=gpu_count, logger=logger,
-                             callbacks=[es,mc], accumulate_grad_batches=cfg.accumulate_grad_batches)
+                             callbacks=[es,mc], accumulate_grad_batches=cfg.accumulate_grad_batches,
+                             precision="16-mixed")
 
     trainer.fit(model, train_dataloaders=gdm.train_dataloader(),val_dataloaders=gdm.val_dataloader(),
                 ckpt_path=checkpoint_path)

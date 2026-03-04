@@ -15,8 +15,8 @@ params:
   TestRun : False
   style_samples : True
   remove_newline : False
-  persistent_workers : True
-  n_workers : 8
+  persistent_workers : False
+  n_workers : 0
   label_dropout : 0.2
 
   augmentation:

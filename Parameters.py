@@ -4,6 +4,7 @@
 
 """
 
+import platform
 import torch
 from torch import nn
 import numpy as np
@@ -18,18 +19,19 @@ from src.data.utils.alphabet import Alphabet
 from PIL import ImageEnhance
 from src.data.utils.constants import *
 
+IS_WINDOWS = platform.system() == "Windows"
 
 
-alpha = Alphabet()
+
+alpha = Alphabet(dataset="UNIFIED")
 back = T.ToPILImage()
 
 #settings for all
 
 """
-    IAM alone 672 writers
-    IAM + synthetic data 1045 writers
+    UNIFIED Arabic dataset: 424 writers (EJUST + AHAWP)
 """
-num_writers =1045# 672
+num_writers = 424
 
 size = (768,768)
 z_shape = (96,96)
@@ -40,7 +42,7 @@ z_shape = (96,96)
 use_combined_dataloader = True
 activate_style_padding = True
 
-alphabet_size = 84
+alphabet_size = 36
 patience = 30
 gpu_count = 1
 scale = 1.0
@@ -57,8 +59,8 @@ only_Test = False
 max_epochs = 50230 # 100
 min_epochs = 1
 batch_size = 8
-n_workers = 8
-persistent_workers = True
+n_workers = 0 if IS_WINDOWS else 8
+persistent_workers = False if IS_WINDOWS else True
 root = None#TODO IAM ROOT
 
 #Writer Params

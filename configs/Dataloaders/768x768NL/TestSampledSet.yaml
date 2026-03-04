@@ -12,8 +12,8 @@ params:
   TestRun : False
   style_samples : False
   remove_newline : True
-  persistent_workers : True
-  n_workers : 8
+  persistent_workers : False
+  n_workers : 0
   test_on_val : False
   train_h5 : #TODO path to train h5 file with synthetic data
   val_h5 :  #TODO path to validation h5 file with synthetic data

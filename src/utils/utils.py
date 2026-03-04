@@ -13,11 +13,10 @@ def count_params(model, verbose=False):
         print(f"{model.__class__.__name__} has {total_params * 1.e-6:.2f} M params.")
     return total_params
 
-#TODO is this name problematic? It would break a lot...
-def get_yaml(application,filename,project_name="mt_handwriting-diffusion",config_directory="configs"):
-    mypath = os.getcwd()
-    path = mypath[:mypath.find(project_name) + len(project_name)]
-    return os.path.join(path, config_directory,application,filename)
+def get_yaml(application,filename,config_directory="configs"):
+    # Resolve project root from this file's location (src/utils/utils.py -> project root)
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    return os.path.join(project_root, config_directory, application, filename)
 
 def instantiate_completely(application,filename,**kwargs):
     file = get_yaml(application,filename)

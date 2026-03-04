@@ -50,12 +50,13 @@ class HTR_Writer(pl.LightningModule):
                  writer_analysis_dict=None,
                  long_line_memory=None,
                  remove_new_line_in_model= False,
+                 dataset_type="UNIFIED",
                  ):
 
         super(HTR_Writer, self).__init__()
         self.lr = lr
 
-        self.alphabet = Alphabet()
+        self.alphabet = Alphabet(dataset=dataset_type)
 
         self.noisy_teacher = NoisyTeacherForcing(A_size=alphabet_size,noise_prob=noisy_teacher_prob)
         self.num_writers = num_writers

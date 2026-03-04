@@ -29,8 +29,8 @@ from src.utils.utils import *
 
 def diffusion_parse_args():
     parser = ArgumentParser()
-    parser.add_argument('--DiffusionConfigFile', type=str,default="ours.yaml")
-    parser.add_argument('--DataloaderConfigFile', type=str, default="general768x768.yaml") #TODO is this the correct DL?
+    parser.add_argument('--DiffusionConfigFile', type=str,default="oursUNIFIED.yaml")
+    parser.add_argument('--DataloaderConfigFile', type=str, default="generalUNIFIED768x768.yaml")
     parser.add_argument('--reset_optimizers_ldm', action='store_true',default=False)
     parser.add_argument('--name', type=str, default="--default")
     parser.add_argument('--batch_size', type=int, default=1)
@@ -55,13 +55,15 @@ if __name__ == "__main__":
 
     if cfg.strategy == "demo":
         trainer = pl.Trainer(accelerator="gpu", devices=1, logger=logger,
-                             callbacks=[ModelCheckpoint()], max_steps=max_steps)
+                             callbacks=[ModelCheckpoint()], max_steps=max_steps,
+                             precision="16-mixed")
     else:
 
         trainer = pl.Trainer(accelerator="gpu", devices=8, logger=logger,
                                   accumulate_grad_batches=accumulate_grad_batches,
                                  strategy=DDPStrategy(find_unused_parameters=True),callbacks=[ModelCheckpoint()],
-                             max_steps=max_steps)
+                             max_steps=max_steps,
+                             precision="16-mixed")
 
     model = instantiate_completely("Diffusion/ldm/", cfg.DiffusionConfigFile)
 

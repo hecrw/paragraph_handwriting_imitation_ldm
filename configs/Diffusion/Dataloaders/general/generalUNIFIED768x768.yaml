@@ -2,8 +2,10 @@ target: src.data.GeneralDataModule.GeneralDataModule
 params:
   batch_size: 8
   dataset: src.data.GeneralDataset.GeneralSimultaneousAugmentationsDataset
-  root_source: #TODO insert IAM path here
-  dataset_type : "iam"
+  root_source: datasets/UNIFIED
+  dataset_type : "UNIFIED"
+  dataset_type_val : "UNIFIED"
+  dataset_type_test : "UNIFIED"
   scale : 1.0
   size : [768,768]
   z_shape : [96,96]
@@ -15,6 +17,7 @@ params:
   persistent_workers : False
   n_workers : 0
   label_dropout : 0.2
+  load_test : False
 
   augmentation:
     target: src.data.augmentation.ocrodegTwoAtOnce.OcrodegAug2

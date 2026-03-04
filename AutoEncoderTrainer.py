@@ -29,8 +29,8 @@ from pytorch_lightning.strategies.ddp import DDPStrategy
 
 def autoKL_parse_args():
     parser = ArgumentParser()
-    parser.add_argument('--AutoKLConfigFile', type=str,default="768x768AutoKL.yaml")
-    parser.add_argument('--DataloaderConfigFile', type=str, default="general768x768.yaml") #TODO is this the correct DL?
+    parser.add_argument('--AutoKLConfigFile', type=str,default="768x768AutoKLUNIFIED.yaml")
+    parser.add_argument('--DataloaderConfigFile', type=str, default="generalUNIFIED768x768.yaml")
     parser.add_argument('--reset_optimizers_auto', action='store_true',default=False)
     parser.add_argument('--name', type=str, default="--default")
     parser.add_argument('--batch_size', type=int, default=2)
@@ -70,12 +70,14 @@ if __name__ == "__main__":
 
     if "demo" == cfg.strategy:
         trainer = pl.Trainer( accelerator="gpu", devices=1, logger=logger, callbacks=[cb,mc],
-                              accumulate_grad_batches=cfg.accumulate_grad_batches)
+                              accumulate_grad_batches=cfg.accumulate_grad_batches,
+                              precision="16-mixed")
     else:
         #in case you wanna train it on multi gpu
         trainer = pl.Trainer( accelerator="gpu", devices=2, logger=logger,callbacks=[cb,mc],
                              accumulate_grad_batches=cfg.accumulate_grad_batches,
-                              strategy=DDPStrategy(find_unused_parameters=True))
+                              strategy=DDPStrategy(find_unused_parameters=True),
+                              precision="16-mixed")
     trainer.fit(model, train_dataloaders=gdm.train_dataloader(), val_dataloaders=gdm.val_dataloader(),
                 ckpt_path=checkpoint_path)
 

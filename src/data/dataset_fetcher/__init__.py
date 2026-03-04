@@ -1,11 +1,14 @@
 # from src.data.dataset_fetcher.dummy_fetcher import preload_all_dummy, preload_meta_dummy, preload_clustering_dummy
 from src.data.dataset_fetcher.iam_fetcher import preload_all_iam
+from src.data.dataset_fetcher.unified_fetcher import preload_all_unified
 # from src.data.dataset_fetcher.nbb_fetcher import preload_all_nbb, preload_meta_nbb, preload_clustering_nbb
 # from src.data.dataset_fetcher.rimes_fetcher import preload_all_rimes, preload_meta_rimes, preload_clustering_rimes
 import h5py
 from src.data.utils.alphabet import Alphabet
 
 def fetch_dataset(dataset_type, preload=True, **kwargs):
+    if dataset_type.lower() == "unified":
+        return preload_all_unified(**kwargs)
     if dataset_type.lower() == "IAM".lower():
         if preload:
             return preload_all_iam(**kwargs)

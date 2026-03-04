@@ -12,7 +12,7 @@ def convert_position_to_text(pos, d):
     return out
 
 class Alphabet():
-    def __init__(self, dataset="IAM", mode="both"):
+    def __init__(self, dataset="UNIFIED", mode="both"):
         if mode == "ctc":
             extra = [BLANK,PAD]
         elif mode== "attention":
@@ -28,13 +28,14 @@ class Alphabet():
         nbb_characters = ['ſ', 'ʒ', 'Ʒ', 'Ü', 'ü', 'Ö', 'ö', 'Ä', 'ä', ]  # according to transcription guidelines
         rimes_characters = ["à", "é", "è", "€", "ù", "ô", 'ê', 'ç', 'î', 'û', '¤', '°', 'â', 'ë', '=', '{', '}', 'À',
                             '%', 'É', '²', 'œ', '_', ]
-        if dataset.lower()=="NBB".lower():
-            # nbb_characters = ['a','b','d','e','f','h','o','i','l','n','s','t','w','A','B','D','I','K']
-            # nbb_characters = ['/','*','ſ','ʒ',' ','ü','.','~','ö','ẅ', '%', '@', '+', '-', '=', 'ë','§','$','ä',':','ÿ','Ö','?','Ʒ','(',')','Ë','`',',']
-            # nbb_characters = [' ', 'ſ', '*', 'ʒ', '.', '~', '?', '/', 'ü', '%', '̈', 'ö', 'ä', '=', '§', 'Ö', '-', '$', 'ë',
-            #                   '@', "'", '#', 'Ë', 'ÿ', 'ẅ', '&', 'å', 'Ʒ', '2']
+        arabic_letters = [' ', 'ء', 'ا', 'ب', 'ة', 'ت', 'ث', 'ج', 'ح', 'خ',
+                          'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ',
+                          'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي']
+
+        if dataset.lower() == "unified" or dataset.lower() == "arabic":
+            types = [extra, arabic_letters]
+        elif dataset.lower()=="NBB".lower():
             self.seperators = ['.',':',',','/','~','§','%','-','*',' ','@']
-            # types = [extra, lower, upper, numbers, nbb_characters]
             types = [extra, lower, upper, numbers, nbb_characters, self.seperators]
         elif dataset=="rimes":
             types = [extra, lower, upper, numbers, punctuation, rimes_characters]

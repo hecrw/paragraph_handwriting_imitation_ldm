@@ -45,7 +45,7 @@ class AbstractDataset(Dataset):
         z_shape_style = tuple(z_shape_style)
 
         self.activate_style_padding = activate_style_padding
-        self.alphabet = Alphabet(dataset="IAM", mode="both")
+        self.alphabet = Alphabet(dataset=dataset_type, mode="both")
         self.z_shape_style = z_shape_style
         self.size = size
         self.z_shape = z_shape
