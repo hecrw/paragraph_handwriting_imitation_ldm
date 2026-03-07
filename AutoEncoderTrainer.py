@@ -72,13 +72,13 @@ if __name__ == "__main__":
     if "demo" == cfg.strategy:
         trainer = pl.Trainer( accelerator="gpu", devices=1, logger=logger, callbacks=[cb,mc],
                               accumulate_grad_batches=cfg.accumulate_grad_batches,
-                              precision=32)
+                              precision="bf16-mixed")
     else:
         #in case you wanna train it on multi gpu
         trainer = pl.Trainer( accelerator="gpu", devices=2, logger=logger,callbacks=[cb,mc],
                              accumulate_grad_batches=cfg.accumulate_grad_batches,
                               strategy=DDPStrategy(find_unused_parameters=True),
-                              precision=32)
+                              precision="bf16-mixed")
     trainer.fit(model, train_dataloaders=gdm.train_dataloader(), val_dataloaders=gdm.val_dataloader(),
                 ckpt_path=checkpoint_path)
 

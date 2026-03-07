@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     trainer = pl.Trainer(max_epochs=max_epochs, accelerator="gpu", devices=gpu_count, logger=logger,
                              callbacks=[es,mc], accumulate_grad_batches=cfg.accumulate_grad_batches,
-                             precision=32)
+                             precision="bf16-mixed")
 
     trainer.fit(model, train_dataloaders=gdm.train_dataloader(),val_dataloaders=gdm.val_dataloader(),
                 ckpt_path=checkpoint_path)
