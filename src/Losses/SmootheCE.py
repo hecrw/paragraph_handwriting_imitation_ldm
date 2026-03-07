@@ -23,7 +23,7 @@ class SmoothCE(torch.nn.Module):
 
         if batches_flattened == False:
             n_class = pred.size(2)
-            one_hot = torch.zeros_like(pred)
+            one_hot = torch.zeros_like(pred,device='cuda')
             one_hot = one_hot.scatter(2, gold.view(gold.shape[0],-1, 1), 1)
             one_hot_eps = one_hot * (1 - self.eps) + (1 - one_hot) * self.eps / (n_class - 1)
             log_prb = F.log_softmax(pred, dim=2)
@@ -39,7 +39,7 @@ class SmoothCE(torch.nn.Module):
 
         if self.eps >= 0.:
             n_class = pred.size(1)
-            one_hot = torch.zeros_like(pred)
+            one_hot = torch.zeros_like(pred,device='cuda')
             one_hot = one_hot.scatter(1, gold.view(-1, 1), 1)
             one_hot_eps = one_hot * (1 - self.eps) + (1 - one_hot) * self.eps / (n_class - 1)
             log_prb = F.log_softmax(pred, dim=1)

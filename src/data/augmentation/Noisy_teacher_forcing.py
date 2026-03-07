@@ -8,6 +8,11 @@ class NoisyTeacherForcing():
     def __init__(self, A_size, noise_prob=0.):
         self.noise_prob = torch.Tensor([noise_prob])
         self.A_size = A_size
+      #  self.device = 'cpu'
+
+        if torch.cuda.is_available():
+           # self.device = 'cuda'
+            self.noise_prob = self.noise_prob.cuda()
 
     def __call__(self, x,unpadded_text_len):
 

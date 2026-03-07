@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from torch import nn
 from torchvision import transforms
-from scipy import ndimage
+from kornia import morphology
 
 from thirdparty import ocrodeg
 from PIL import Image
@@ -72,13 +72,14 @@ class OcrodegAug(nn.Module):
             x = cv2.resize(x, None, fx=fx, fy=1, interpolation=cv2.INTER_LINEAR)
 
         if self.p_dilation > torch.rand(1):
-            k_h, k_w = tuple(torch.randint(low=2,high=5,size=(2,)).tolist())
-            kernel = np.ones((k_h, k_w), dtype=np.uint8)
-            x = cv2.erode(x.astype(np.float32), kernel, iterations=1)
+            kernel = torch.ones(tuple(torch.randint(low=2,high=5,size=(2,))))
+            x = torch.from_numpy(x).view(1,self.color_channels,x.shape[0],x.shape[1])
+            x = morphology.erosion(x,kernel).squeeze().numpy()
 
         if self.p_erosion > torch.rand(1):
-            kernel = np.ones((2, 2), dtype=np.uint8)
-            x = cv2.dilate(x.astype(np.float32), kernel, iterations=1)
+            kernel = torch.ones(2,2)
+            x = torch.from_numpy(x).view(1,self.color_channels,x.shape[0],x.shape[1])
+            x = morphology.dilation(x,kernel).squeeze().numpy()
 
         for sigma in [2,5]:
             if self.p_distort_with_noise > torch.rand(1):

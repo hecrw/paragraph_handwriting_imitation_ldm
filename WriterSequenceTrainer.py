@@ -33,7 +33,7 @@ def writer_parse_args():
     parser.add_argument('--DataloaderConfigFile', type=str, default="generalUNIFIED768x768.yaml")
     parser.add_argument('--reset_optimizers_writer', action='store_true',default=False)
     parser.add_argument('--name', type=str, default="--default")
-    parser.add_argument('--batch_size', type=int, default=16)
+    parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--accumulate_grad_batches', type=int, default=2)
 
     return parser.parse_args()
