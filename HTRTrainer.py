@@ -35,7 +35,7 @@ def htr_parse_args():
     parser.add_argument('--DataloaderConfigFile', type=str, default="generalUNIFIED768x768.yaml")
     parser.add_argument('--reset_optimizers_htr', action='store_true',default=False)
     parser.add_argument('--name', type=str, default="--default")
-    parser.add_argument('--batch_size', type=int, default=8)
+    parser.add_argument('--batch_size', type=int, default=4)
     parser.add_argument('--accumulate_grad_batches', type=int, default=2)
     return parser.parse_args()
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     trainer = pl.Trainer(max_epochs=max_epochs, accelerator="gpu", devices=gpu_count, logger=logger,
                              callbacks=[es,mc], accumulate_grad_batches=cfg.accumulate_grad_batches,
-                             precision="bf16-mixed")
+                             precision=32)
 
     trainer.fit(model, train_dataloaders=gdm.train_dataloader(),val_dataloaders=gdm.val_dataloader(),
                 ckpt_path=checkpoint_path)

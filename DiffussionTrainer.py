@@ -58,14 +58,14 @@ if __name__ == "__main__":
     if cfg.strategy == "demo":
         trainer = pl.Trainer(accelerator="gpu", devices=1, logger=logger,
                              callbacks=[ModelCheckpoint()], max_steps=max_steps,
-                             precision="bf16-mixed")
+                             precision=32)
     else:
 
         trainer = pl.Trainer(accelerator="gpu", devices=8, logger=logger,
                                   accumulate_grad_batches=accumulate_grad_batches,
                                  strategy=DDPStrategy(find_unused_parameters=True),callbacks=[ModelCheckpoint()],
                              max_steps=max_steps,
-                             precision="bf16-mixed")
+                             precision=32)
 
     model = instantiate_completely("Diffusion/ldm/", cfg.DiffusionConfigFile)
 
