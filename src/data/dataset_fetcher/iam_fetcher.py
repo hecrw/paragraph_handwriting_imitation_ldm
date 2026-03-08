@@ -6,6 +6,7 @@ from tqdm import tqdm
 import random
 from src.data.utils.xml_utils import crawlerXML
 from src.data.utils.alphabet import Alphabet
+from src.data.dataset_fetcher.lazy_image_dict import LazyImageDict
 
 def _get_sample_names(root):
     xml_path = os.path.join(root,"xml")
@@ -40,17 +41,16 @@ def preload_all_iam(root, split, max_samples=-1,
         paragraph_root = os.path.join(root, "paragraphs")
         ext = os.path.splitext(os.listdir(paragraph_root)[0])[1]
 
-
-
+        images = LazyImageDict()
 
         for s in tqdm(sample_names):
             xml_data = _extract_data_from_xml(os.path.join(xml_root,s)+".xml")
 
+            img_path = os.path.join(paragraph_root, s) + ext
+            crop_box = (xml_data["paragraph"]["left"], xml_data["paragraph"]["top"],
+                        xml_data["paragraph"]["right"], xml_data["paragraph"]["bottom"])
+            images.set_path(s, img_path, mode, crop_box)
 
-
-            img = Image.open(os.path.join(paragraph_root,s)+ext).convert(mode)
-            images[s] = img.crop((xml_data["paragraph"]["left"], xml_data["paragraph"]["top"],
-                                  xml_data["paragraph"]["right"], xml_data["paragraph"]["bottom"]))
             meta_data[s] = {"text": xml_data["paragraph"]["text"],
                             "writer": xml_data["paragraph"]["writer"],
                             "text_logits": alphabet.string_to_logits(xml_data["paragraph"]["text"])}

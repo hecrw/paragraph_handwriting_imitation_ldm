@@ -1,8 +1,8 @@
 import os
 import json
-from PIL import Image
 from tqdm import tqdm
 from src.data.utils.alphabet import Alphabet
+from src.data.dataset_fetcher.lazy_image_dict import LazyImageDict
 
 
 def preload_all_unified(root, split, alphabet=None, mode="L", size=(768, 768),
@@ -33,16 +33,15 @@ def preload_all_unified(root, split, alphabet=None, mode="L", size=(768, 768),
     if 0 < max_samples < len(sample_names):
         sample_names = sample_names[:max_samples]
 
-    images = {}
+    images = LazyImageDict()
     meta_data = {}
 
     for s in tqdm(sample_names, desc=f"Loading UNIFIED {split}"):
         entry = annotations[s]
 
-        # Load image (already 768x768 grayscale)
+        # Register image path for lazy loading (loaded from disk on access)
         img_path = os.path.join(root, "images_768", f"{s}.png")
-        img = Image.open(img_path).convert(mode)
-        images[s] = img
+        images.set_path(s, img_path, mode)
 
         writer_int = writer_to_id[entry["writer_id"]]
         meta_data[s] = {
